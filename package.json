@@ -1,0 +1,26 @@
+{
+  "name": "shokax-cli",
+  "version": "0.0.1",
+  "description": "The easiest way to install shokaX",
+  "main": "index.js",
+  "repository": "https://github.com/zkz098/shokaX-CLI",
+  "author": "Chou kaitaku",
+  "license": "MIT",
+  "packageManager": "yarn@3.2.3",
+  "dependencies": {
+    "commander": "^9.4.1",
+    "hexo-log": "^4.0.1",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/shelljs": "^0.8.11",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
+    "eslint": "^8.27.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "typescript": "^4.9.3"
+  }
+}
