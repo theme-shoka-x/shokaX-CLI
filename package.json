@@ -6,13 +6,13 @@
   "repository": "https://github.com/zkz098/shokaX-CLI",
   "author": "Chou kaitaku",
   "license": "MIT",
-  "packageManager": "yarn@3.2.3",
   "dependencies": {
     "commander": "^9.4.1",
     "hexo-log": "^4.0.1",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
+    "@types/node": "^18.11.9",
     "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
