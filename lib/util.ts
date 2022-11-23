@@ -5,7 +5,7 @@ import fs from 'fs'
 const versionUtil = '0.0.1'
 const hexoLog = logger()
 
-const prepare = (pm:string):[boolean, string] => {
+const prepareTheme = (pm:string):[boolean, string] => {
   if (!shell.which('git')) {
     hexoLog.error('The program need git')
     return [false, '']
@@ -26,9 +26,14 @@ const prepare = (pm:string):[boolean, string] => {
 
 const installTheme = (theme:string, repo:'github'|'gitee', pm:string) => {
   const origin = repo === 'github' ? 'https://github.com/zkz098/hexo-theme-shokaX.git' : 'https://github.com/zkz098/hexo-theme-shokaX.git1'
-  const preList = prepare(pm)
+  const preList = prepareTheme(pm)
   if (!preList[0]) {
-    hexoLog.error('Install theme failed,because prepare was failed')
+    hexoLog.error('Install theme failed: prepare was failed')
+    process.exit(1)
+  }
+  hexoLog.info(`Using package manager: ${preList[1]}`)
+  if (shell.exec(`git clone --depth=1 ${origin} ./themes/shokaX`).code !== 0) {
+    hexoLog.error('Install theme failed: git clone error')
     process.exit(1)
   }
 }

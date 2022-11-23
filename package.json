@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "The easiest way to install shokaX",
   "main": "index.js",
+  "bin": {
+    "shokaX-cli": "index.js",
+    "SXC": "index.js"
+  },
   "repository": "https://github.com/zkz098/shokaX-CLI",
   "author": "Chou kaitaku",
   "license": "MIT",
