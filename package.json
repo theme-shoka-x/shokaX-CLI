@@ -4,7 +4,7 @@
   "description": "The easiest way to install shokaX",
   "main": "index.js",
   "bin": {
-    "shokaX-cli": "index.js",
+    "shokaX-CLI": "index.js",
     "SXC": "index.js"
   },
   "repository": "https://github.com/zkz098/shokaX-CLI",
@@ -13,11 +13,13 @@
   "dependencies": {
     "commander": "^9.4.1",
     "hexo-log": "^4.0.1",
+    "js-yaml": "^4.1.0",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
     "@types/shelljs": "^0.8.11",
+    "@types/js-yaml": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^8.27.0",
