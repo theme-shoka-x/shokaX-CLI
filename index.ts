@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
-import { versionUtil, installTheme } from './lib/util'
+import { versionUtil, installTheme, repairTheme } from './lib/util'
 
 const versionCLI = '0.0.1'
 const program = new Command()
@@ -9,12 +9,21 @@ program
     shokaX-CLI (shokaX 0.x ver.)
     CLI: ${versionCLI} Util: ${versionUtil}
     `)
+  .command('install <theme>')
   .option('-r, --repo <origin>', 'origin mode(gitee/github)', 'github')
   .option('-pm, --packageManager <packageManager>', 'choose a packageManager to install packages', 'auto')
-  .command('install <theme>')
+  .option('-expack, --extraPackages <...packages> ', 'Install some extra packages')
   .description('Install shoka or shokaX theme')
-  .action((theme) => {
-    installTheme(theme, program.opts().repo, program.opts().packageManager)
+  .action(function (theme, options) {
+    installTheme(theme, options.repo, options.packageManager, options.extraPackages)
   })
 
+program
+  .command('repair')
+  .option('-pm, --packageManager <packageManager>', 'choose a packageManager to install packages', 'auto')
+  .option('-p, --part <part>', 'Fix parts (all/packages/files)', 'all')
+  .description('Repair the theme to solve problems')
+  .action(function (options) {
+    repairTheme(options.packageManager, options.part)
+  })
 program.parse()
