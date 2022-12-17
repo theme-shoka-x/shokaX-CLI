@@ -3,10 +3,11 @@
 
 ## 快速上手
 ```bash
+npm i shokax-cli --location=global
 SXC install shokaX
 ```
 一行代码就能完成shokaX的安装,并且shokaX-cli会处理好依赖项问题 \
-不需要像之前一样手动安装数十个包
+不需要像之前一样手动安装多个包
 
 ## 高级配置
 ```bash
