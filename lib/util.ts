@@ -29,7 +29,7 @@ const installNeedPakcages = (preList:[boolean, string]) => {
     removePm = preList[1] + ' remove'
   }
   shell.exec(`${removePm} hexo-renderer-marked`);
-  ['hexo-renderer-multi-next-markdown-it', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug', 'pug']
+  ['hexo-renderer-multi-next-markdown-it', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug']
     .forEach((item) => {
       addPackage(preList[1], item)
     })
@@ -57,7 +57,7 @@ const prepareTheme = (pm: string): [boolean, string] => {
 }
 
 // Install theme / 安装主题
-const installTheme = (theme: string, repo: 'github' | 'gitee', pm: string, extra?: string[]) => {
+const installTheme = (theme: string, repo: 'github' | 'gitee' | 'npm', pm: string, extra?: string[]) => {
   const origin = repo === 'github' ? 'https://github.com/zkz098/hexo-theme-shokaX.git' : 'https://gitee.com/zkz0/hexo-theme-shokaX.git'
   const preList = prepareTheme(pm)
   if (!preList[0]) {
@@ -65,9 +65,13 @@ const installTheme = (theme: string, repo: 'github' | 'gitee', pm: string, extra
     process.exit(1)
   }
   hexoLog.info(`Using package manager: ${preList[1]}`)
-  if (shell.exec(`git clone --depth=1 ${origin} ./themes/shokaX`).code !== 0) {
-    hexoLog.error('Install theme failed: git clone error')
-    process.exit(1)
+  if (repo === 'npm') {
+    addPackage(preList[1], 'hexo-theme-shokax')
+  } else {
+    if (shell.exec(`git clone --depth=1 ${origin} ./themes/shokaX`).code !== 0) {
+      hexoLog.error('Install theme failed: git clone error')
+      process.exit(1)
+    }
   }
   hexoLog.info('Waiting for package manager...')
   installNeedPakcages(preList)
@@ -101,6 +105,7 @@ const repairTheme = (packageManager:string, part:'all'|'packages'|'files') => {
     ['_images.yml', '_config.yml', 'source/js/library.js', 'source/js/global.js',
       'source/js/page.js', 'source/js/components.js'].forEach((item) => {
       if (!fs.existsSync(`./theme/shokaX/${item}`)) {
+        hexoLog.error(`path: ./theme/shokaX/${item}`)
         hexoLog.error(`Not found ${item}.Try to install theme again`)
       }
     });
