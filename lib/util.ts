@@ -1,9 +1,18 @@
 import shell from 'shelljs'
 import { logger } from 'hexo-log'
 import fs from 'fs'
+import zlib from 'zlib'
+import path from 'path'
 
-const versionUtil = '0.0.1'
+const versionUtil = '0.1.0'
 const hexoLog = logger()
+const collocSet = {
+  recommend: [
+    'hexo-indexnow',
+    'hexo-deployer-git',
+    'hexo-generator-baidu-sitemap'
+  ]
+}
 
 // Install Package / 通过包管理器安装包
 const addPackage = (pm: string, packageName: string): boolean => {
@@ -56,10 +65,57 @@ const prepareTheme = (pm: string): [boolean, string] => {
   }
 }
 
+const getGithubProgarm = async () => {
+  const res = await fetch('https://api.github.com/repos/theme-shoka-x/hexo-theme-shokaX/actions/workflows/build-theme.yml/runs')
+  const data = await res.json()
+  const latestRunId = data.workflow_runs[0].id
+  const arts = await fetch(`https://api.github.com/repos/theme-shoka-x/hexo-theme-shokaX/actions/runs/${latestRunId}/artifacts`)
+  const dataArts:{
+    artifacts: Array<{
+      archive_download_url:string
+    }>} = await arts.json()
+
+  const dataUrl = dataArts.artifacts.map((artifact) => artifact.archive_download_url)[0]
+
+  // 下载ZIP文件
+  const zipRes = await fetch(dataUrl)
+  const zipBuffer = await zipRes.arrayBuffer()
+
+  // 解压ZIP文件
+  const extractPath = path.join('./themes/shokaX')
+
+  if (!fs.existsSync(extractPath)) {
+    fs.mkdirSync(extractPath, { recursive: true })
+  }
+
+  const unzipStream = zlib.createUnzip()
+  const writeStream = fs.createWriteStream(extractPath)
+
+  await new Promise((resolve, reject) => {
+    unzipStream.on('error', reject)
+    writeStream.on('error', reject)
+    writeStream.on('close', resolve)
+    unzipStream.pipe(writeStream)
+    unzipStream.end(zipBuffer)
+  })
+
+  hexoLog.info('ZIP file downloaded and extracted successfully.')
+}
 // Install theme / 安装主题
-const installTheme = (theme: string, repo: 'github' | 'gitee' | 'npm', pm: string, extra?: string[]) => {
-  const origin = repo === 'github' ? 'https://github.com/zkz098/hexo-theme-shokaX.git' : 'https://gitee.com/zkz0/hexo-theme-shokaX.git'
+const installTheme = (theme: string, repo: 'github' | 'gitee' | 'npm', pm: string,
+  extra?: string[], collocation?: 'recommend') => {
+  const origin = ''
   const preList = prepareTheme(pm)
+  if (repo === 'github') {
+    getGithubProgarm().then(() => {
+      installNeedPakcages(preList)
+      hexoLog.info('Please change the config to enable shokaX.')
+      hexoLog.info(`
+    step1: open _config.yml and change theme: 'theme: shokaX or shokax(if install by npm)'
+    step2: name the _config.landscape.yml to _config.shokaX.yml`
+      )
+    })
+  }
   if (!preList[0]) {
     hexoLog.error('Install theme failed: prepare was failed')
     process.exit(1)
@@ -81,10 +137,17 @@ const installTheme = (theme: string, repo: 'github' | 'gitee' | 'npm', pm: strin
       addPackage(preList[1], item)
     })
   }
+
+  if (typeof collocation !== 'undefined') {
+    hexoLog.info(`Installing collocation ${collocation}`)
+    collocSet[collocation].forEach((item) => {
+      addPackage(preList[1], item)
+    })
+  }
   // 最后的提示
   hexoLog.info('Please change the config to enable shokaX.')
   hexoLog.info(`
-    step1: open _config.yml and change theme: 'theme: shokaX'
+    step1: open _config.yml and change theme: 'theme: shokaX or shokax(if install by npm)'
     step2: name the _config.landscape.yml to _config.shokaX.yml`
   )
 }
