@@ -2,7 +2,7 @@
 import { Command } from 'commander'
 import { versionUtil, installTheme, repairTheme } from './lib/util'
 
-const versionCLI = '0.1.0'
+const versionCLI = '0.1.1'
 const program = new Command()
 program
   .version(`

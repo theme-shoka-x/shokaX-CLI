@@ -4,7 +4,7 @@ import fs from 'fs'
 import zlib from 'zlib'
 import path from 'path'
 
-const versionUtil = '0.1.0'
+const versionUtil = '0.2.0'
 const hexoLog = logger()
 const collocSet = {
   recommend: [
@@ -38,7 +38,7 @@ const installNeedPakcages = (preList:[boolean, string]) => {
     removePm = preList[1] + ' remove'
   }
   shell.exec(`${removePm} hexo-renderer-marked`);
-  ['hexo-renderer-multi-next-markdown-it', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug']
+  ['hexo-renderer-multi-next-markdown-it', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug', 'esbuild', 'theme-shokax-pjax', 'theme-shokax-anime', 'lozad']
     .forEach((item) => {
       addPackage(preList[1], item)
     })
