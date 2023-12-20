@@ -4,7 +4,7 @@ import fs from 'fs'
 import zlib from 'zlib'
 import path from 'path'
 
-const versionUtil = '0.2.0'
+const versionUtil = '0.2.2'
 const hexoLog = logger()
 const collocSet = {
   recommend: [
@@ -37,8 +37,19 @@ const installNeedPakcages = (preList:[boolean, string]) => {
   } else {
     removePm = preList[1] + ' remove'
   }
-  shell.exec(`${removePm} hexo-renderer-marked`);
-  ['hexo-renderer-multi-next-markdown-it', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug', 'esbuild', 'theme-shokax-pjax', 'theme-shokax-anime', 'lozad']
+  shell.exec(`${removePm} hexo-renderer-marked`)
+  try {
+    addPackage(preList[1], 'hexo-renderer-multi-next-markdown-it')
+  } catch (e) {
+    hexoLog.info('Try install markdown renderer without scripts')
+    try {
+      addPackage(preList[1], 'hexo-renderer-multi-next-markdown-it --ignore-scripts')
+    } catch (e) {
+      throw Error('Failed to install markdown renderer without scripts')
+    }
+  }
+  ['hexo-lightning-minify', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug',
+    'esbuild', 'theme-shokax-pjax', 'theme-shokax-anime', 'lozad']
     .forEach((item) => {
       addPackage(preList[1], item)
     })
@@ -162,21 +173,6 @@ const repairTheme = (packageManager:string, part:'all'|'packages'|'files') => {
   if (part !== 'files') {
     hexoLog.info('Checking packages...')
     installNeedPakcages(preList)
-  }
-  if (part !== 'packages') {
-    hexoLog.info('Checking files');
-    ['_images.yml', '_config.yml', 'source/js/library.js', 'source/js/global.js',
-      'source/js/page.js', 'source/js/components.js'].forEach((item) => {
-      if (!fs.existsSync(`./theme/shokaX/${item}`)) {
-        hexoLog.error(`path: ./theme/shokaX/${item}`)
-        hexoLog.error(`Not found ${item}.Try to install theme again`)
-      }
-    });
-    ['source/js/player.js'].forEach((item) => {
-      if (!fs.existsSync(`./theme/shokaX/${item}`)) {
-        hexoLog.warn(`Not found ${item}.Some feature will be unavailable`)
-      }
-    })
   }
 }
 

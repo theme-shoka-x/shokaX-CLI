@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
-import { versionUtil, installTheme, repairTheme } from './lib/util'
+import { versionUtil, installTheme, repairTheme } from './lib/util.js'
 
 const versionCLI = '0.1.1'
 const program = new Command()
