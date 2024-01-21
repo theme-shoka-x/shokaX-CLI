@@ -3,3 +3,5 @@
 yarn.lock
 /node_modules/
 *.ts
+*.tsbuildinfo
+tsconfig.json

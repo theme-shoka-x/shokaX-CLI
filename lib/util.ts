@@ -49,7 +49,7 @@ const installNeedPakcages = (preList:[boolean, string]) => {
     }
   }
   ['hexo-lightning-minify', 'hexo-autoprefixer', 'hexo-algoliasearch', 'hexo-feed', 'hexo-renderer-pug',
-    'esbuild', 'theme-shokax-pjax', 'theme-shokax-anime', 'lozad']
+    'esbuild', 'theme-shokax-pjax', 'theme-shokax-anime', 'lozad', 'mouse-firework']
     .forEach((item) => {
       addPackage(preList[1], item)
     })
