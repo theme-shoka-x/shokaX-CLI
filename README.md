@@ -1,3 +1,4 @@
+**ShokaX 0.4.6及更高版本中工具箱随NPM包/Git仓库分发，SXC已不再被需要**
 # shokaX-CLI
 安装shokaX最简单的方式,只需要一行代码
 
